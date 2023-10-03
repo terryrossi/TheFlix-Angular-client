@@ -121,21 +121,21 @@ export class FetchApiDataService {
 
   // Making the api call for: Add a Favorite Movie to a User
   // It will be in extractResponseData.favoriteMovies
-  addFavoriteMovies(userName: string, movieId: string): Observable<any> {
+  addFavoriteMovies(userName: string, movie: any): Observable<any> {
     // const token = localStorage.getItem('token');
     return this.http
-      .post(apiUrl + 'users/' + userName, { movieId })
+      .post(apiUrl + 'users/' + userName, { movie })
       .pipe(catchError(this.handleError));
   }
 
   // Making the api call for: Delete a Favorite Movie from a User
-  deleteFavoriteMovies(userName: string, movieId: string): Observable<any> {
+  deleteFavoriteMovies(userName: string, movie: any): Observable<any> {
     const token = localStorage.getItem('token');
     // return this.http
-    // .delete(apiUrl + 'users/' + userId , {movieId})
+    // .delete(apiUrl + 'users/' + userName , {movie})
     // .pipe(catchError(this.handleError));
     return this.http
-      .delete(`${apiUrl}users/${userName}/favorites?id=${movieId}`, {
+      .delete(`${apiUrl}users/${userName}/favorites?id=${movie}`, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
