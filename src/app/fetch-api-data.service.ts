@@ -169,14 +169,28 @@ export class FetchApiDataService {
     return body || {};
   }
 
-  private handleError(error: HttpErrorResponse): any {
+  // Error Handling
+  // private handleError(error: HttpErrorResponse): any {
+  //   if (error.error instanceof ErrorEvent) {
+  //     console.error('Some error occurred:', error.error.message);
+  //   } else {
+  //     console.error(
+  //       `Error Status code ${error.status}, ` + `Error body is: ${error.error}`
+  //     );
+  //   }
+  //   return throwError('Something bad happened; please try again later.');
+  // }
+  private handleError(error: any): Observable<any> {
+    let errorMessage = 'Unknown error!';
     if (error.error instanceof ErrorEvent) {
-      console.error('Some error occurred:', error.error.message);
+      errorMessage = `Error: ${error.errors[0].msg}`;
     } else {
-      console.error(
-        `Error Status code ${error.status}, ` + `Error body is: ${error.error}`
-      );
+      errorMessage = `Error Code: ${error.status} ${error.error}`;
+      // console.log('error.error.errors[0].msg : ');
+      // console.log(error.error.errors[0].msg);
     }
-    return throwError('Something bad happened; please try again later.');
+    window.alert(errorMessage);
+    // return throwError(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

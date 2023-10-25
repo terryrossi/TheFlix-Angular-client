@@ -1,0 +1,32 @@
+// src/app/user-registration-form/user-registration-form.component.scss
+
+// Assuming the default theme's input text color is applied, and you want to match that.
+// You may need to adjust the color value if you're using a custom theme.
+$mat-input-text-color: mat-color(#333);
+
+mat-card {
+  // To ensure the card takes up the max width of the dialog (if not set elsewhere)
+  width: 100%;
+
+  mat-card-header {
+    // To center the title
+    justify-content: center;
+
+    mat-card-title {
+      // To ensure the title color matches the input text color
+      color: $mat-input-text-color;
+      // Make the title bold
+      font-weight: bold;
+      font-size: x-large;
+
+      // Add space below the title
+      margin-bottom: 16px; // Adjust this value as needed
+    }
+  }
+
+  input[matInput] {
+    // Assuming you want to explicitly set the color of input texts
+    // If not, you can remove this rule.
+    color: $mat-input-text-color;
+  }
+}
