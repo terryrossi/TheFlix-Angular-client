@@ -7,6 +7,7 @@ $mat-input-text-color: mat-color(#333);
 mat-card {
   // To ensure the card takes up the max width of the dialog (if not set elsewhere)
   width: 100%;
+  justify-content: center;
 
   mat-card-header {
     // To center the title
@@ -14,7 +15,7 @@ mat-card {
 
     mat-card-title {
       // To ensure the title color matches the input text color
-      color: $mat-input-text-color;
+      color: #333;
       // Make the title bold
       font-weight: bold;
       font-size: x-large;
@@ -23,10 +24,28 @@ mat-card {
       margin-bottom: 16px; // Adjust this value as needed
     }
   }
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; // this centers children horizontally
 
+    mat-form-field {
+      width: 80%; // or a specific px/em/rem value
+      justify-content: center;
+    }
+  }
   input[matInput] {
     // Assuming you want to explicitly set the color of input texts
     // If not, you can remove this rule.
+
     color: $mat-input-text-color;
+  }
+  mat-hint {
+    font-size: 8px; /* Adjust as desired */
+    color: #333;
+    padding-bottom: 10px;
+  }
+  mat-card-actions {
+    justify-content: center;
   }
 }

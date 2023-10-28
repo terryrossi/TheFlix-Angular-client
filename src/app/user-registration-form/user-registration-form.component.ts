@@ -10,10 +10,17 @@ import { FetchApiDataService } from '../fetch-api-data.service';
 // This import is used to display notifications back to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+// Additional Form fields
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 @Component({
   selector: 'app-user-registration-form',
   templateUrl: './user-registration-form.component.html',
   styleUrls: ['./user-registration-form.component.scss'],
+  // standalone: true,
+  // imports: [MatFormFieldModule, MatInputModule, MatSelectModule],
 })
 export class UserRegistrationFormComponent implements OnInit {
   @Input() userData = {

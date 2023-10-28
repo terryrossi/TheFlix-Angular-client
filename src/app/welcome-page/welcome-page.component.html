@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<div class="page-title" fxLayoutAlign="center center">
+  <h1>Welcome to TheFlix!</h1>
+</div>
+<div class="welcome-buttons" fxLayout="row" fxLayoutAlign="center center">
+  <button
+    mat-raised-button
+    (click)="openUserRegistrationDialog()"
+    style="margin-right: 10px"
+    color="primary"
+  >
+    Sign Up
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="openUserLoginDialog()"
+    style="margin-right: 10px"
+  >
+    Login
+  </button>
+</div>

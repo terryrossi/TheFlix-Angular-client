@@ -21,7 +21,6 @@ const apiUrl = 'https://theflix-api.herokuapp.com/';
 export class FetchApiDataService {
   // Inject the HttpClient module to the constructor params
   // This will provide HttpClient to the entire class, making it available via this.http
-
   constructor(private http: HttpClient) {}
 
   // Making the api call for: User registration
@@ -58,7 +57,7 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  // Making the api call for: Get all movies
+  // Making the api call for: Get one movie
   getOneMovies(movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http
@@ -180,17 +179,42 @@ export class FetchApiDataService {
   //   }
   //   return throwError('Something bad happened; please try again later.');
   // }
+  // private handleError(error: any): Observable<any> {
+  //   let errorMessage = 'Unknown error!';
+  //   if (error.error instanceof ErrorEvent) {
+  //     errorMessage = `Error: ${error.errors[0].msg}`;
+  //   } else {
+  //     errorMessage = `Error Code: ${error.status} ${error.error}`;
+  // console.log('error.error.errors[0].msg : ');
+  // console.log(error.error.errors[0].msg);
+  //   }
+  //   window.alert(errorMessage);
+  //   // return throwError(errorMessage);
+  //   return throwError(() => new Error(errorMessage));
+  // }
   private handleError(error: any): Observable<any> {
     let errorMessage = 'Unknown error!';
+
+    // Check if the error is an instance of ErrorEvent
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.errors[0].msg}`;
+      // Handle client-side error
+      errorMessage = error.error.message;
     } else {
-      errorMessage = `Error Code: ${error.status} ${error.error}`;
-      // console.log('error.error.errors[0].msg : ');
-      // console.log(error.error.errors[0].msg);
+      // Check if error contains an array of errors
+      if (
+        error.error &&
+        error.error.errors &&
+        Array.isArray(error.error.errors) &&
+        error.error.errors.length > 0
+      ) {
+        errorMessage = error.error.errors[0].msg;
+      } else {
+        // Handle server-side error
+        errorMessage = `${error.status} - ${error.error}`;
+      }
     }
+
     window.alert(errorMessage);
-    // return throwError(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

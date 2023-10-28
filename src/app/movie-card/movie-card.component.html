@@ -1,0 +1,29 @@
+<!DOCTYPE html/>
+<!-- src/app/movie-card/movie-card.component.html -->
+<div class="sticky-wrapper">
+  <div class="page-title" fxLayoutAlign="center center">
+    <h1>TheFlix list of Movies</h1>
+  </div>
+</div>
+<div class="movie-card" style="display: flex">
+  <mat-card *ngFor="let movie of movies" style="flex: 1 1 auto">
+    <mat-card-header>
+      <mat-card-title>{{ movie.title }}</mat-card-title>
+
+      <mat-card-subtitle
+        >Directed by: {{ movie.director.name }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <img
+      class="movie-image"
+      src="{{ movie.imageURL }}"
+      alt="{{ movie.title }}"
+    />
+    <mat-card-actions>
+      <button mat-button color="primary">Genre</button>
+      <button mat-button color="primary">Director</button>
+      <button mat-button color="primary">Synopsis</button>
+      <mat-icon>favorite_border</mat-icon>
+    </mat-card-actions>
+  </mat-card>
+</div>
