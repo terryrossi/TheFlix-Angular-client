@@ -11,12 +11,16 @@
   width: 200px; // Explicit width
   height: 300px; // Explicit height
   object-fit: cover; // Ensures image covers the given width/height while retaining aspect ratio
+  cursor: pointer; // This will change the cursor to the "clickable" hand icon
+  &:hover {
+    // any additional hover styles you want to add
+  }
 }
 mat-card-header {
-  display: flex;
-  justify-content: center; // Center contents horizontally
-  align-items: center; // Center contents vertically
-  text-align: center; // Center text
+  // display: flex;
+  // justify-content: center; // Center contents horizontally
+  // align-items: center; // Center contents vertically
+  // text-align: center; // Center text
 
   // This is an optional style. By default, Angular Material puts some padding on the header.
   // You can adjust or remove this padding if you want the title and subtitle to be closer together.
@@ -28,9 +32,13 @@ mat-card {
   justify-content: center; // Center contents horizontally
   align-items: center; // Center contents vertically
   text-align: center; // Center text
+  background-color: rgb(164, 160, 160);
 
   // This is an optional style. By default, Angular Material puts some padding on the header.
   // You can adjust or remove this padding if you want the title and subtitle to be closer together.
   padding: 16px;
   margin: 10px;
+}
+.custom-snackbar {
+  bottom: 170px !important; // Adjust as needed to lower the position of the snackbar
 }

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<div class="sticky-wrapper">
+  <div class="toolbar" fxLayoutAlign="center center">
+    <mat-toolbar color="primary">
+      <!-- Menu for smaller screens -->
+      <button *ngIf="isSmallScreen" mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button
+          *ngIf="!isUserLoggedIn()"
+          mat-menu-item
+          (click)="openUserRegistrationDialog()"
+        >
+          Register
+        </button>
+        <button
+          *ngIf="!isUserLoggedIn()"
+          mat-menu-item
+          (click)="openUserLoginDialog()"
+        >
+          Login
+        </button>
+        <button *ngIf="isUserLoggedIn()" mat-menu-item (click)="signOff()">
+          Logoff
+        </button>
+      </mat-menu>
+
+      <!-- Logo -->
+      <span>THEFLIX</span>
+      <span class="spacer"></span>
+
+      <!-- Buttons for larger screens -->
+      <ng-container *ngIf="!isSmallScreen">
+        <button
+          *ngIf="!isUserLoggedIn()"
+          mat-button
+          (click)="openUserRegistrationDialog()"
+        >
+          Register
+        </button>
+        <button
+          *ngIf="!isUserLoggedIn()"
+          mat-button
+          (click)="openUserLoginDialog()"
+        >
+          Login
+        </button>
+        <ng-container *ngIf="isUserLoggedIn()">
+          <button mat-button (click)="signOff()">Logoff</button>
+          <button mat-button (click)="openUserProfileDialog()">
+            User Profile
+          </button>
+        </ng-container>
+      </ng-container>
+    </mat-toolbar>
+  </div>
+</div>
+
+<!-- <div class="sticky-wrapper">
+  <div class="toolbar" fxLayoutAlign="center center">
+    <mat-toolbar color="primary">
+      <span>THEFLIX</span>
+      <span class="spacer"></span>
+      <button
+        *ngIf="!isUserLoggedIn()"
+        mat-button
+        (click)="openUserRegistrationDialog()"
+      >
+        Register
+      </button>
+      <button
+        *ngIf="!isUserLoggedIn()"
+        mat-button
+        (click)="openUserLoginDialog()"
+      >
+        Login
+      </button>
+      <button *ngIf="isUserLoggedIn()" mat-button (click)="signOff()">
+        Logoff
+      </button>
+    </mat-toolbar>
+  </div>
+</div> -->

@@ -4,7 +4,7 @@
     <mat-card-title>Login</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form>
+    <form #loginForm="ngForm">
       <mat-form-field>
         <input
           matInput
@@ -13,7 +13,11 @@
           type="text"
           name="userName"
           required
+          #userName="ngModel"
         />
+        <mat-error *ngIf="userName.invalid && userName.touched">
+          Username is required.
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -23,12 +27,21 @@
           placeholder="Password"
           name="password"
           required
+          #password="ngModel"
         />
+        <mat-error *ngIf="password.invalid && password.touched">
+          Password is required.
+        </mat-error>
       </mat-form-field>
     </form>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button (click)="loginUser()" color="primary">
+    <button
+      mat-raised-button
+      (click)="loginUser(loginForm)"
+      [disabled]="!loginForm.valid"
+      color="primary"
+    >
       Login
     </button>
   </mat-card-actions>

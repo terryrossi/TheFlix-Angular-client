@@ -1,0 +1,11 @@
+<h1 class="genre-title" mat-dialog-title>{{ genre.name }}</h1>
+<mat-dialog-content class="mat-typography">
+  <!-- <img src="././assets/man.jpg" alt="{{ genre.name }}" class="director-image" /> -->
+  <h2 *ngIf="genre.description" class="genre-description">
+    Description : {{ genre.description }}
+  </h2>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

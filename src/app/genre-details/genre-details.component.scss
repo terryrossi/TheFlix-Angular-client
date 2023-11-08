@@ -1,0 +1,31 @@
+.mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // This will align the children (image and description) to the center
+  justify-content: center;
+}
+
+.genre-description {
+  max-width: 100%; // Description won't be wider than 100% of its container
+  text-align: left;
+  font-size: 14px;
+  color: rgb(250, 250, 250);
+  overflow-wrap: break-word; // Ensures text breaks to avoid overflow
+}
+.genre-image {
+  max-width: 100%; // This ensures the image is never wider than its container
+  max-height: 70vh; // This limits the image height to 70% of the viewport height
+  height: auto; // This keeps the aspect ratio intact
+  // margin-bottom: 20px; // Maintains bottom spacing
+  align-self: center;
+  text-align: center;
+  align-content: center;
+}
+// h1.mat-dialog-title {
+//   font-size: 24px !important;
+// }
+.genre-title {
+  font-size: 24px;
+  text-align: center;
+  color: white;
+}

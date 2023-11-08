@@ -1,0 +1,21 @@
+<h1 class="director-title" mat-dialog-title>{{ director.name }}</h1>
+<mat-dialog-content class="mat-typography">
+  <img
+    src="../../assets/man.jpg"
+    alt="{{ director.name }}"
+    class="director-image"
+  />
+  <h2 *ngIf="director.bio" class="director-description">
+    Bio : {{ director.bio }}
+  </h2>
+  <h2 *ngIf="director.birth" class="director-description">
+    Birth : {{ director.birth }}
+  </h2>
+  <h2 *ngIf="director.death" class="director-description">
+    Death : {{ director.birth }}
+  </h2>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

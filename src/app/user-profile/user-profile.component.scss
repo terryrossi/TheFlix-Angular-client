@@ -36,8 +36,8 @@ mat-card {
     }
   }
   input[matInput] {
-    // Assuming you want to explicitly set the color of input texts
-    // If not, you can remove this rule.
+    // Assuming we want to explicitly set the color of input texts
+    // If not, we can remove this rule.
 
     color: $mat-input-text-color;
   }

@@ -10,6 +10,11 @@ import { FetchApiDataService } from '../fetch-api-data.service';
 // This import is used to display notifications back to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+// Router
+import { Router } from '@angular/router';
+
+import { NgForm } from '@angular/forms';
+
 // Additional Form fields
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -32,16 +37,33 @@ export class UserRegistrationFormComponent implements OnInit {
     birthDate: '',
   };
 
+  hidePassword = true;
+
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<UserRegistrationFormComponent>,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    public router: Router
   ) {}
 
   ngOnInit(): void {}
 
+  // Make password visible or invisible
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
+  }
+
   // This is the function responsible for sending the form inputs to the backend
-  registerUser(): void {
+  registerUser(registrationForm: NgForm): void {
+    if (!registrationForm.valid) {
+      // Optionally handle the invalid form case, e.g., show a message
+      return;
+    }
+    if (this.userData.birthDate) {
+      const dateObject = new Date(this.userData.birthDate);
+      this.userData.birthDate = dateObject.toISOString().split('T')[0];
+    }
+
     this.fetchApiData.userRegistration(this.userData).subscribe({
       next: (result) => {
         // Log the successful response to the console
@@ -49,9 +71,12 @@ export class UserRegistrationFormComponent implements OnInit {
 
         // Logic for a successful user registration goes here!
         this.dialogRef.close(); // This will close the modal on success!
+        localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
+        localStorage.setItem('userName', this.userData.userName);
         this.snackBar.open('You have been Registered', 'OK', {
           duration: 20000,
         });
+        this.router.navigate(['movies']);
       },
       error: (errorResponse) => {
         // Log the detailed error response to the console
@@ -59,24 +84,12 @@ export class UserRegistrationFormComponent implements OnInit {
 
         // Display the error message (assuming errorResponse.error contains the message)
         this.snackBar.open(errorResponse, 'OK', {
-          duration: 20000,
+          // duration: 20000,
+          verticalPosition: 'top', // position the snackbar at the top
+          horizontalPosition: 'center', // position the snackbar at the center horizontally
+          panelClass: 'custom-snackbar',
         });
       },
     });
-    //   (result) => {
-    //     // Logic for a successful user registration goes here! (To be implemented)
-    //     this.dialogRef.close(); // This will close the modal on success!
-    //     console.log(result);
-    //     this.snackBar.open(result, 'OK', {
-    //       duration: 20000,
-    //     });
-    //   },
-    //   (result) => {
-    //     console.log(result);
-    //     this.snackBar.open(result, 'OK', {
-    //       duration: 20000,
-    //     });
-    //   }
-    // );
   }
 }

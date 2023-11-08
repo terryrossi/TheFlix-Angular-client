@@ -1,9 +1,28 @@
 <!DOCTYPE html>
-<div class="page-title" fxLayoutAlign="center center">
+<mat-toolbar color="primary">
+  <span>TheFlix</span>
+  <span class="spacer"></span>
+  <button
+    *ngIf="!isUserLoggedIn()"
+    mat-button
+    (click)="openUserRegistrationDialog()"
+  >
+    Register
+  </button>
+  <button *ngIf="!isUserLoggedIn()" mat-button (click)="openUserLoginDialog()">
+    Login
+  </button>
+  <button *ngIf="isUserLoggedIn()" mat-button (click)="signOff()">
+    Logoff
+  </button>
+</mat-toolbar>
+
+<!-- <div class="page-title" fxLayoutAlign="center center">
   <h1>Welcome to TheFlix!</h1>
-</div>
+</div> -->
 <div class="welcome-buttons" fxLayout="row" fxLayoutAlign="center center">
   <button
+    *ngIf="!isUserLoggedIn()"
     mat-raised-button
     (click)="openUserRegistrationDialog()"
     style="margin-right: 10px"
@@ -12,11 +31,21 @@
     Sign Up
   </button>
   <button
+    *ngIf="!isUserLoggedIn()"
     mat-raised-button
     color="primary"
     (click)="openUserLoginDialog()"
     style="margin-right: 10px"
   >
     Login
+  </button>
+  <button
+    *ngIf="isUserLoggedIn()"
+    mat-raised-button
+    color="primary"
+    (click)="signOff()"
+    style="margin-right: 10px"
+  >
+    Sign Off
   </button>
 </div>

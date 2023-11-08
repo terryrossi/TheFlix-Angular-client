@@ -1,0 +1,9 @@
+<h1 class="movie-title" mat-dialog-title>{{ movie.title }}</h1>
+<mat-dialog-content class="mat-typography">
+  <img [src]="movie.imageURL" alt="{{ movie.title }}" class="movie-image" />
+  <h2 class="movie-description">{{ movie.description }}</h2>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

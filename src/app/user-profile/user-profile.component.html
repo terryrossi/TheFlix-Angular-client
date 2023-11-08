@@ -1,10 +1,23 @@
-<!-- src/app/user-registration-form/user-registration-form.component.html -->
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Register</mat-card-title>
+    <mat-card-title>User Profile</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form #registrationForm="ngForm">
+    <form #profileForm="ngForm">
+      <!-- Non-editable UserID -->
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="User Name"
+          [(ngModel)]="userData.userName"
+          type="text"
+          name="userName"
+          disabled
+          #userName="ngModel"
+        />
+        <mat-hint align="start">User Name is not updatable</mat-hint>
+      </mat-form-field>
+
       <mat-form-field>
         <input
           matInput
@@ -18,7 +31,7 @@
         <mat-error *ngIf="firstName.invalid && firstName.touched">
           Firstname is required.
         </mat-error>
-        <mat-hint align="start">Must be alphanumeric</mat-hint>
+        <mat-hint align="start">First Name Must be alphanumeric</mat-hint>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -33,9 +46,21 @@
         <mat-error *ngIf="lastName.invalid && lastName.touched">
           Lastname is required.
         </mat-error>
-        <mat-hint align="start">Must be alphanumeric</mat-hint>
+        <mat-hint align="start">Last Name Must be alphanumeric</mat-hint>
       </mat-form-field>
+      <!-- Non-editable Birth Date -->
       <mat-form-field>
+        <input
+          matInput
+          placeholder="Birth Date"
+          [value]="userData.birthDate | date : 'longDate'"
+          disabled
+        />
+        <mat-hint align="start">Your date of birth (not updatable)</mat-hint>
+      </mat-form-field>
+
+      <!--  Comment out username and password editing. This should be done in a different component? -->
+      <!-- <mat-form-field>
         <input
           matInput
           [(ngModel)]="userData.userName"
@@ -49,8 +74,8 @@
           Username is required.
         </mat-error>
         <mat-hint align="start">Min 8 characters</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
+      </mat-form-field> -->
+      <!-- <mat-form-field>
         <input
           matInput
           [(ngModel)]="userData.password"
@@ -67,7 +92,8 @@
           Password is required.
         </mat-error>
         <mat-hint align="start">Min 8 characters</mat-hint>
-      </mat-form-field>
+      </mat-form-field> -->
+
       <mat-form-field>
         <input
           matInput
@@ -83,27 +109,16 @@
         </mat-error>
         <mat-hint align="start">Must be a valid email</mat-hint>
       </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          [(ngModel)]="userData.birthDate"
-          [matDatepicker]="picker"
-          placeholder="BirthDate"
-          name="birthDate"
-        />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker startView="multi-year" touchUi></mat-datepicker>
-      </mat-form-field>
     </form>
   </mat-card-content>
   <mat-card-actions>
     <button
       mat-raised-button
-      (click)="registerUser(registrationForm)"
-      [disabled]="!registrationForm.valid"
+      (click)="updateUserProfile(profileForm)"
+      [disabled]="!profileForm.valid"
       color="primary"
     >
-      Sign Up
+      Update Profile
     </button>
   </mat-card-actions>
 </mat-card>

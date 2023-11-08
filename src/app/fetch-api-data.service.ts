@@ -145,8 +145,21 @@ export class FetchApiDataService {
   // Making the api call for: Edit User
   public userEdit(userDetails: any): Observable<any> {
     console.log(userDetails);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Handle the case where there is no token
+      console.error('Token not found in localStorage');
+      return throwError(() => new Error('Token not found'));
+    }
+    // Create an HTTPHeader with the JWT Token
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+        'Content-Type': 'application/json',
+      }),
+    };
     return this.http
-      .patch(apiUrl + 'users', userDetails)
+      .patch(apiUrl + 'users', userDetails, httpOptions)
       .pipe(catchError(this.handleError));
   }
 
@@ -194,10 +207,17 @@ export class FetchApiDataService {
   // }
   private handleError(error: any): Observable<any> {
     let errorMessage = 'Unknown error!';
+    // Temporarily handle error messages in each Component...
+    console.log('Error in fetch-API : ' + error);
+    console.log(error);
+    // errorMessage = error.error.message;
+    // errorMessage = error;
 
     // Check if the error is an instance of ErrorEvent
     if (error.error instanceof ErrorEvent) {
       // Handle client-side error
+      errorMessage = error.error.message;
+    } else if (error.error.message) {
       errorMessage = error.error.message;
     } else {
       // Check if error contains an array of errors
@@ -214,7 +234,7 @@ export class FetchApiDataService {
       }
     }
 
-    window.alert(errorMessage);
+    // window.alert(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

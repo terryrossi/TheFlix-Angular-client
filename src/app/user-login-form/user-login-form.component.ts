@@ -12,6 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Router } from '@angular/router';
 
+import { NgForm } from '@angular/forms';
+
 @Component({
   selector: 'app-user-login-form',
   templateUrl: './user-login-form.component.html',
@@ -33,7 +35,11 @@ export class UserLoginFormComponent implements OnInit {
   ngOnInit(): void {}
 
   // This is the function responsible for sending the form inputs to the backend
-  loginUser(): void {
+  loginUser(loginForm: NgForm): void {
+    if (!loginForm.valid) {
+      // Optionally handle the invalid form case, e.g., show a message
+      return;
+    }
     this.fetchApiData.userLogin(this.userData).subscribe({
       next: (result) => {
         // Log the successful response to the console
@@ -45,19 +51,27 @@ export class UserLoginFormComponent implements OnInit {
 
         this.dialogRef.close(); // This will close the modal on success!
         localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
-        localStorage.setItem('username', this.userData.userName);
+        localStorage.setItem('userName', this.userData.userName);
         this.snackBar.open('You have been Logged In!', 'OK', {
           duration: 20000,
         });
       },
       error: (errorResponse) => {
         // Log the detailed error response to the console
-        console.log('Detailed error:', errorResponse.error);
+        console.log('Detailed error BELOW:', errorResponse);
+        console.log(errorResponse);
+        // console.log(
+        // 'errorResponse.error.message:',
+        // errorResponse.error.message
+        // );
+        // console.log(errorResponse.error.message);
 
-        // Display the error message (assuming errorResponse.error contains the message)
-        this.snackBar.open(errorResponse.error, 'OK', {
-          duration: 20000,
+        // Display the error message (assuming errorResponse.error.message contains the message)
+        // if (errorResponse.error.message) {
+        this.snackBar.open(errorResponse, 'OK', {
+          // duration: 20000,
         });
+        // }
       },
     });
   }
