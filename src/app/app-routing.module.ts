@@ -18,6 +18,7 @@ const routes: Routes = [
   // { path: 'welcome', component: WelcomePageComponent },
   { path: 'movies', component: MovieCardComponent },
   { path: '', redirectTo: 'movies', pathMatch: 'full' }, // changed from 'prefix' to 'full' to make it more precise
+  { path: 'welcome', redirectTo: 'movies', pathMatch: 'full' }, // changed from 'prefix' to 'full' to make it more precise
 ];
 
 @NgModule({
