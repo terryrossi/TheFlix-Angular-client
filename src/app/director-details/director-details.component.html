@@ -1,10 +1,19 @@
 <h1 class="director-title" mat-dialog-title>{{ director.name }}</h1>
 <mat-dialog-content class="mat-typography">
   <img
-    src="../../assets/man.jpg"
-    alt="{{ director.name }}"
+    src="assets/man.jpg"
+    alt="Image of {{ director.name }}"
     class="director-image"
   />
+  <div class="image-attribution">
+    <a
+      href="https://www.freepik.com/free-vector/mysterious-mafia-man-smoking-cigarette_7074311.htm#query=avatar&position=1&from_view=keyword&track=sph"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Image by pikisuperstar</a
+    >
+    on Freepik
+  </div>
   <h2 *ngIf="director.bio" class="director-description">
     Bio : {{ director.bio }}
   </h2>

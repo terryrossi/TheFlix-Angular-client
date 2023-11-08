@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class UserProfileComponent implements OnInit {
   // Assuming userData is the object that contains the user's information
   userData: any = {};
+  originalUserData: any = {}; // A copy of the initial user data for comparison
 
   hidePassword = true;
 
@@ -38,8 +39,10 @@ export class UserProfileComponent implements OnInit {
       this.fetchApiData.getUser(userName).subscribe(
         (response) => {
           this.userData = response;
-          console.log('USERDATA : ***********');
-          console.log(this.userData);
+          // Make a deep copy of the initial userData for later comparison
+          this.originalUserData = JSON.parse(JSON.stringify(response));
+          // console.log('USERDATA : ***********');
+          // console.log(this.userData);
           return this.userData;
         },
         (error) => {
@@ -58,6 +61,18 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
+    // Check if userData has changed
+    if (
+      JSON.stringify(this.originalUserData) === JSON.stringify(this.userData)
+    ) {
+      // No changes detected, so no need to update
+      this.snackBar.open('No changes made.', 'OK', {
+        duration: 20000,
+      });
+      return;
+    }
+
+    // If changes are detected, proceed with the update
     this.fetchApiData.userEdit(this.userData).subscribe({
       next: (result) => {
         // Log the successful response to the console

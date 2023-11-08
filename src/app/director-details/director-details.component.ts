@@ -14,7 +14,7 @@ export class DirectorDetailsComponent {
     console.log(
       'director-details.component Constructor: (director) $$$$$$$$$$'
     );
-    // this.director.ImageUrl = 'assets/man.jpg';
+    this.director.ImageUrl = '././assets/man.jpg';
     console.log(this.director);
   }
 }
