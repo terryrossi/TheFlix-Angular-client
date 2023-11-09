@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FetchApiDataService } from '../fetch-api-data.service';
 import { NgForm } from '@angular/forms';
+
+// App Components
+import { FetchApiDataService } from '../fetch-api-data.service';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 // Router
 import { Router } from '@angular/router';
@@ -22,6 +25,7 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<UserProfileComponent>,
+    public dialog: MatDialog,
     public snackBar: MatSnackBar,
     public router: Router
   ) {}
@@ -99,6 +103,51 @@ export class UserProfileComponent implements OnInit {
           panelClass: 'custom-snackbar',
         });
       },
+    });
+  }
+
+  deleteUserProfile(): void {
+    // If changes are detected, proceed with the update
+    this.fetchApiData.deleteUser(this.userData.userName).subscribe({
+      next: (result) => {
+        // Log the successful response to the console
+        console.log('User Delete response:', result);
+
+        // Logic for a successful user delete goes here!
+        this.dialogRef.close(); // This will close the modal on success!
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName');
+        // this.snackBar.open('You have been Logged Off!', 'OK', {
+        //   duration: 20000,
+        // });
+        this.router.navigate(['/']); // Redirect to home/welcome page
+        this.snackBar.open('User has been Deleted', 'OK', {
+          duration: 20000,
+        });
+      },
+      error: (errorResponse) => {
+        // Log the detailed error response to the console
+        console.log('Detailed errorResponse in delete user:', errorResponse);
+
+        // Display the error message (assuming errorResponse.error contains the message)
+        this.snackBar.open(errorResponse, 'OK', {
+          // duration: 20000,
+          verticalPosition: 'top', // position the snackbar at the top
+          horizontalPosition: 'center', // position the snackbar at the center horizontally
+          panelClass: 'custom-snackbar',
+        });
+      },
+    });
+  }
+
+  // Window confirmation for deleting User
+  openConfirmDialog(): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteUserProfile();
+      }
     });
   }
 }

@@ -49,6 +49,7 @@ export class MovieCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('is logged in? ' + this.isUserLoggedIn());
     if (!this.isUserLoggedIn()) {
       this.showLoginPrompt();
     }

@@ -25,6 +25,7 @@ export class FetchApiDataService {
 
   // Making the api call for: User registration
   public userRegistration(userDetails: any): Observable<any> {
+    console.log('userDetails');
     console.log(userDetails);
     return this.http
       .post(apiUrl + 'users', userDetails)
@@ -171,70 +172,137 @@ export class FetchApiDataService {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
+        responseType: 'text',
       })
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
+  // private extractResponseData(res: any): any {
+  //   console.log('extractResponseData.................');
+  //   console.log(res);
+  //   // If response is a text, return it directly.
+  //   if (typeof res === 'string') {
+  //     return res;
+  //   }
+  //   // If response is JSON, return body or empty object.
+  //   return res.body || {};
+  // }
+
   // Non-typed response extraction
   private extractResponseData(res: any): any {
+    console.log('extractResponseData.................');
+    console.log(res);
     const body = res;
+    console.log('extractResponseData in fetch-api-data Body : ' + body);
     return body || {};
   }
+  // Error handling
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    // Default error message
+    let errorMessage = 'An unknown error occurred!';
+    console.error('Error occurred:', error);
 
-  // Error Handling
-  // private handleError(error: HttpErrorResponse): any {
-  //   if (error.error instanceof ErrorEvent) {
-  //     console.error('Some error occurred:', error.error.message);
-  //   } else {
-  //     console.error(
-  //       `Error Status code ${error.status}, ` + `Error body is: ${error.error}`
-  //     );
-  //   }
-  //   return throwError('Something bad happened; please try again later.');
-  // }
-  // private handleError(error: any): Observable<any> {
-  //   let errorMessage = 'Unknown error!';
-  //   if (error.error instanceof ErrorEvent) {
-  //     errorMessage = `Error: ${error.errors[0].msg}`;
-  //   } else {
-  //     errorMessage = `Error Code: ${error.status} ${error.error}`;
-  // console.log('error.error.errors[0].msg : ');
-  // console.log(error.error.errors[0].msg);
-  //   }
-  //   window.alert(errorMessage);
-  //   // return throwError(errorMessage);
-  //   return throwError(() => new Error(errorMessage));
-  // }
-  private handleError(error: any): Observable<any> {
-    let errorMessage = 'Unknown error!';
-    // Temporarily handle error messages in each Component...
-    console.log('Error in fetch-API : ' + error);
-    console.log(error);
-    // errorMessage = error.error.message;
-    // errorMessage = error;
-
-    // Check if the error is an instance of ErrorEvent
+    // Client-side error
     if (error.error instanceof ErrorEvent) {
-      // Handle client-side error
-      errorMessage = error.error.message;
-    } else if (error.error.message) {
-      errorMessage = error.error.message;
-    } else {
+      errorMessage = `A client-side error occurred: ${error.error.message}`;
+    }
+    // Backend returned an unsuccessful response code.
+    else if (error.status !== 0) {
+      // Backend returned a plain text message
+      if (error.error instanceof ProgressEvent && error.statusText) {
+        errorMessage = `Backend returned code ${error.status}: ${error.statusText}`;
+      }
+      // Backend returned a JSON error object
+      else if (error.error.message) {
+        errorMessage = error.error.message;
+      }
       // Check if error contains an array of errors
-      if (
-        error.error &&
-        error.error.errors &&
+      else if (
         Array.isArray(error.error.errors) &&
         error.error.errors.length > 0
       ) {
         errorMessage = error.error.errors[0].msg;
-      } else {
-        // Handle server-side error
-        errorMessage = `${error.status} - ${error.error}`;
+      }
+      // General server-side error
+      else {
+        errorMessage = `Server returned code ${error.status}: ${error.message}`;
       }
     }
+    // Other cases like network issues etc.
+    else {
+      errorMessage = 'Server could not be reached due to a network error';
+    }
 
-    // window.alert(errorMessage);
+    // Log the error message
+    console.error(errorMessage);
+
+    // Throw an observable with a user-facing error message
     return throwError(() => new Error(errorMessage));
   }
+
+  // private handleError(error: any): Observable<any> {
+  //   let errorMessage = 'Unknown error!';
+  //   // Temporarily handle error messages in each Component...
+  //   console.log('Error in fetch-API : ' + error);
+  //   console.log(error);
+  //   // errorMessage = error.error.message;
+  //   // errorMessage = error;
+
+  //   // Check if the error is an instance of ErrorEvent
+  //   if (error.error instanceof ErrorEvent) {
+  //     // Handle client-side error
+  //     errorMessage = error.error.message;
+  //   } else if (error.error.message) {
+  //     errorMessage = error.error.message;
+  //   } else {
+  //     // Check if error contains an array of errors
+  //     if (
+  //       error.error &&
+  //       error.error.errors &&
+  //       Array.isArray(error.error.errors) &&
+  //       error.error.errors.length > 0
+  //     ) {
+  //       errorMessage = error.error.errors[0].msg;
+  //     } else {
+  //       // Handle server-side error
+  //       errorMessage = `${error.status} - ${error.error}`;
+  //     }
+  //   }
+
+  //   // window.alert(errorMessage);
+  //   return throwError(() => new Error(errorMessage));
+  // }
+
+  // private handleErrorDeleteUser(error: any): Observable<any> {
+  //   let errorMessage = 'Unknown error!';
+  //   // Temporarily handle error messages in each Component...
+  //   console.log('Error in Delete User : ' + error);
+  //   console.log(error);
+  //   // errorMessage = error.error.message;
+  //   // errorMessage = error;
+
+  //   // Check if the error is an instance of ErrorEvent
+  //   if (error.error instanceof ErrorEvent) {
+  //     // Handle client-side error
+  //     errorMessage = error.error.message;
+  //   } else if (error.error.message) {
+  //     errorMessage = error.error.message;
+  //   } else {
+  //     // Check if error contains an array of errors
+  //     if (
+  //       error.error &&
+  //       error.error.errors &&
+  //       Array.isArray(error.error.errors) &&
+  //       error.error.errors.length > 0
+  //     ) {
+  //       errorMessage = error.error.errors[0].msg;
+  //     } else {
+  //       // Handle server-side error
+  //       errorMessage = `${error.status} - ${error.error}`;
+  //     }
+  //   }
+
+  //   // window.alert(errorMessage);
+  //   return throwError(() => new Error(errorMessage));
+  // }
 }

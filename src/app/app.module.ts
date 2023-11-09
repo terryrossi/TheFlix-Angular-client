@@ -33,6 +33,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { GenreDetailsComponent } from './genre-details/genre-details.component';
 import { DirectorDetailsComponent } from './director-details/director-details.component';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 // import { HeaderComponent } from './header/header.component';
 
 // const appRoutes: Routes = [
@@ -53,6 +54,7 @@ import { MovieDetailsComponent } from './movie-details/movie-details.component';
     GenreDetailsComponent,
     DirectorDetailsComponent,
     MovieDetailsComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -71,11 +71,15 @@ export class UserRegistrationFormComponent implements OnInit {
 
         // Logic for a successful user registration goes here!
         this.dialogRef.close(); // This will close the modal on success!
-        localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
-        localStorage.setItem('userName', this.userData.userName);
-        this.snackBar.open('You have been Registered', 'OK', {
-          duration: 20000,
-        });
+        // localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
+        // localStorage.setItem('userName', this.userData.userName);
+        this.snackBar.open(
+          'You have been Registered. Next please Log In...',
+          'OK',
+          {
+            duration: 20000,
+          }
+        );
         this.router.navigate(['movies']);
       },
       error: (errorResponse) => {
