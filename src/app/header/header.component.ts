@@ -65,52 +65,18 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
     this.snackBar.open('You have been Logged Off!', 'OK', {
-      duration: 20000,
+      duration: 2000,
+      verticalPosition: 'top', // position the snackbar at the top
+      horizontalPosition: 'center', // position the snackbar at the center horizontally
     });
     this.router.navigate(['/']); // Redirect to home/welcome page
   }
   showLoginPrompt(): void {
     this.snackBar.open('Please log in to view the movies', 'Close', {
-      duration: 20000, // the message will be shown for 5 seconds; adjust as needed
+      duration: 2000, // the message will be shown for 5 seconds; adjust as needed
       verticalPosition: 'top', // position the snackbar at the top
       horizontalPosition: 'center', // position the snackbar at the center horizontally
       panelClass: 'custom-snackbar',
     });
   }
 }
-
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-header',
-//   templateUrl: './header.component.html',
-//   styleUrls: ['./header.component.scss']
-// })
-// export class HeaderComponent {
-
-//   constructor(
-//     public dialog: MatDialog,
-//     private router: Router,
-//     private snackBar: MatSnackBar
-//   ) {}
-//   ngOnInit(): void {}
-
-//   openUserRegistrationDialog(): void {
-//     this.dialog.open(UserRegistrationFormComponent, {
-//       width: '280px',
-//     });
-//   }
-//   openUserLoginDialog(): void {
-//     this.dialog.open(UserLoginFormComponent, {
-//       width: '280px',
-//     });
-//   }
-//   signOff(): void {
-//     localStorage.removeItem('token');
-//     localStorage.removeItem('username');
-//     this.snackBar.open('You have been Logged Off!', 'OK', {
-//       duration: 20000,
-//     });
-//     this.router.navigate(['/']); // Redirect to home/welcome page
-//   }
-// }

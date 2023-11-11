@@ -179,17 +179,6 @@ export class FetchApiDataService {
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
-  // private extractResponseData(res: any): any {
-  //   console.log('extractResponseData.................');
-  //   console.log(res);
-  //   // If response is a text, return it directly.
-  //   if (typeof res === 'string') {
-  //     return res;
-  //   }
-  //   // If response is JSON, return body or empty object.
-  //   return res.body || {};
-  // }
-
   // Non-typed response extraction
   private extractResponseData(res: any): any {
     // console.log('extractResponseData.................');
@@ -241,70 +230,4 @@ export class FetchApiDataService {
     // Throw an observable with a user-facing error message
     return throwError(() => new Error(errorMessage));
   }
-
-  // private handleError(error: any): Observable<any> {
-  //   let errorMessage = 'Unknown error!';
-  //   // Temporarily handle error messages in each Component...
-  //   console.log('Error in fetch-API : ' + error);
-  //   console.log(error);
-  //   // errorMessage = error.error.message;
-  //   // errorMessage = error;
-
-  //   // Check if the error is an instance of ErrorEvent
-  //   if (error.error instanceof ErrorEvent) {
-  //     // Handle client-side error
-  //     errorMessage = error.error.message;
-  //   } else if (error.error.message) {
-  //     errorMessage = error.error.message;
-  //   } else {
-  //     // Check if error contains an array of errors
-  //     if (
-  //       error.error &&
-  //       error.error.errors &&
-  //       Array.isArray(error.error.errors) &&
-  //       error.error.errors.length > 0
-  //     ) {
-  //       errorMessage = error.error.errors[0].msg;
-  //     } else {
-  //       // Handle server-side error
-  //       errorMessage = `${error.status} - ${error.error}`;
-  //     }
-  //   }
-
-  //   // window.alert(errorMessage);
-  //   return throwError(() => new Error(errorMessage));
-  // }
-
-  // private handleErrorDeleteUser(error: any): Observable<any> {
-  //   let errorMessage = 'Unknown error!';
-  //   // Temporarily handle error messages in each Component...
-  //   console.log('Error in Delete User : ' + error);
-  //   console.log(error);
-  //   // errorMessage = error.error.message;
-  //   // errorMessage = error;
-
-  //   // Check if the error is an instance of ErrorEvent
-  //   if (error.error instanceof ErrorEvent) {
-  //     // Handle client-side error
-  //     errorMessage = error.error.message;
-  //   } else if (error.error.message) {
-  //     errorMessage = error.error.message;
-  //   } else {
-  //     // Check if error contains an array of errors
-  //     if (
-  //       error.error &&
-  //       error.error.errors &&
-  //       Array.isArray(error.error.errors) &&
-  //       error.error.errors.length > 0
-  //     ) {
-  //       errorMessage = error.error.errors[0].msg;
-  //     } else {
-  //       // Handle server-side error
-  //       errorMessage = `${error.status} - ${error.error}`;
-  //     }
-  //   }
-
-  //   // window.alert(errorMessage);
-  //   return throwError(() => new Error(errorMessage));
-  // }
 }

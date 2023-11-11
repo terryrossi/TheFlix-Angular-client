@@ -23,9 +23,12 @@
         >
           Login
         </button>
-        <button *ngIf="isUserLoggedIn()" mat-menu-item (click)="signOff()">
-          Logoff
-        </button>
+        <ng-container *ngIf="isUserLoggedIn()">
+          <button mat-button (click)="signOff()">Logoff</button>
+          <button mat-button (click)="openUserProfileDialog()">
+            User Profile
+          </button>
+        </ng-container>
       </mat-menu>
 
       <!-- Logo -->

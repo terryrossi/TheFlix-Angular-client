@@ -51,7 +51,9 @@ export class UserLoginFormComponent implements OnInit {
         localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
         localStorage.setItem('userName', this.userData.userName);
         this.snackBar.open('You have been Logged In!', 'OK', {
-          duration: 20000,
+          duration: 2000,
+          verticalPosition: 'top', // position the snackbar at the top
+          horizontalPosition: 'center', // position the snackbar at the center horizontally
         });
 
         // this.router.navigate(['movies']);
@@ -69,7 +71,7 @@ export class UserLoginFormComponent implements OnInit {
         // Display the error message (assuming errorResponse.error.message contains the message)
         // if (errorResponse.error.message) {
         this.snackBar.open(errorResponse, 'OK', {
-          // duration: 20000,
+          duration: 2000,
         });
         // }
       },

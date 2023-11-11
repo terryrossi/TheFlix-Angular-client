@@ -45,8 +45,7 @@ export class UserProfileComponent implements OnInit {
           this.userData = response;
           // Make a deep copy of the initial userData for later comparison
           this.originalUserData = JSON.parse(JSON.stringify(response));
-          // console.log('USERDATA : ***********');
-          // console.log(this.userData);
+
           return this.userData;
         },
         (error) => {
@@ -71,7 +70,7 @@ export class UserProfileComponent implements OnInit {
     ) {
       // No changes detected, so no need to update
       this.snackBar.open('No changes made.', 'OK', {
-        duration: 20000,
+        duration: 2000,
       });
       return;
     }
@@ -87,7 +86,9 @@ export class UserProfileComponent implements OnInit {
 
         // localStorage.setItem('userName', this.userData.userName);
         this.snackBar.open('User has been Updated', 'OK', {
-          duration: 20000,
+          duration: 2000,
+          verticalPosition: 'top', // position the snackbar at the top
+          horizontalPosition: 'center', // position the snackbar at the center horizontally
         });
         this.router.navigate(['movies']);
       },
@@ -97,7 +98,7 @@ export class UserProfileComponent implements OnInit {
 
         // Display the error message (assuming errorResponse.error contains the message)
         this.snackBar.open(errorResponse, 'OK', {
-          // duration: 20000,
+          duration: 2000,
           verticalPosition: 'top', // position the snackbar at the top
           horizontalPosition: 'center', // position the snackbar at the center horizontally
           panelClass: 'custom-snackbar',
@@ -110,19 +111,17 @@ export class UserProfileComponent implements OnInit {
     // If changes are detected, proceed with the update
     this.fetchApiData.deleteUser(this.userData.userName).subscribe({
       next: (result) => {
-        // Log the successful response to the console
-        console.log('User Delete response:', result);
-
         // Logic for a successful user delete goes here!
         this.dialogRef.close(); // This will close the modal on success!
         localStorage.removeItem('token');
         localStorage.removeItem('userName');
-        // this.snackBar.open('You have been Logged Off!', 'OK', {
-        //   duration: 20000,
-        // });
+
         this.router.navigate(['/']); // Redirect to home/welcome page
+
         this.snackBar.open('User has been Deleted', 'OK', {
-          duration: 20000,
+          duration: 2000,
+          verticalPosition: 'top', // position the snackbar at the top
+          horizontalPosition: 'center', // position the snackbar at the center horizontally
         });
       },
       error: (errorResponse) => {
@@ -131,7 +130,7 @@ export class UserProfileComponent implements OnInit {
 
         // Display the error message (assuming errorResponse.error contains the message)
         this.snackBar.open(errorResponse, 'OK', {
-          // duration: 20000,
+          duration: 2000,
           verticalPosition: 'top', // position the snackbar at the top
           horizontalPosition: 'center', // position the snackbar at the center horizontally
           panelClass: 'custom-snackbar',

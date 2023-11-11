@@ -18,34 +18,3 @@ export class DirectorDetailsComponent {
     console.log(this.director);
   }
 }
-// export class DirectorDetailsComponent {
-//   public directorName: string;
-//   public directorObject: any = {};
-
-//   constructor(
-//     @Inject(MAT_DIALOG_DATA) public data: any,
-//     public fetchApiData: FetchApiDataService
-//   ) {
-//     console.log(
-//       'director-details.component Constructor: (directorName) $$$$$$$$$$'
-//     );
-//     console.log(data.directorName);
-//     this.directorName = data.directorName;
-//   }
-
-//   ngOnInit(): void {
-//     // if (!this.isUserLoggedIn()) {
-//     //   this.showLoginPrompt();
-//     // }
-//     this.getDirectorObject();
-//   }
-
-//   getDirectorObject(): void {
-//     this.fetchApiData.getDirector(this.directorName).subscribe((resp: any) => {
-//       this.directorObject = resp;
-//       console.log('DIRECTOR OBJECT>>>>>');
-//       console.log(this.directorObject);
-//       return this.directorObject;
-//     });
-//   }
-// }

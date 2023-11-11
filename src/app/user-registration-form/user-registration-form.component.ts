@@ -71,13 +71,21 @@ export class UserRegistrationFormComponent implements OnInit {
 
         // Logic for a successful user registration goes here!
         this.dialogRef.close(); // This will close the modal on success!
+
+        // Log the user automatically will require to call the login component
+        // It is better to have the user log in so his password manager can save the credentials.
+        //
         // localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
         // localStorage.setItem('userName', this.userData.userName);
+
+        //
         this.snackBar.open(
           'You have been Registered. Next please Log In...',
           'OK',
           {
-            duration: 20000,
+            duration: 10000,
+            verticalPosition: 'top', // position the snackbar at the top
+            horizontalPosition: 'center', // position the snackbar at the center horizontally
           }
         );
         this.router.navigate(['movies']);
@@ -88,7 +96,7 @@ export class UserRegistrationFormComponent implements OnInit {
 
         // Display the error message (assuming errorResponse.error contains the message)
         this.snackBar.open(errorResponse, 'OK', {
-          // duration: 20000,
+          duration: 2000,
           verticalPosition: 'top', // position the snackbar at the top
           horizontalPosition: 'center', // position the snackbar at the center horizontally
           panelClass: 'custom-snackbar',
