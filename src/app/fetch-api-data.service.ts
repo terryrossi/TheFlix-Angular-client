@@ -25,8 +25,7 @@ export class FetchApiDataService {
 
   // Making the api call for: User registration
   public userRegistration(userDetails: any): Observable<any> {
-    console.log('userDetails');
-    console.log(userDetails);
+    console.log('userDetails', userDetails);
     return this.http
       .post(apiUrl + 'users', userDetails)
       .pipe(catchError(this.handleError));
@@ -122,30 +121,33 @@ export class FetchApiDataService {
   // Making the api call for: Add a Favorite Movie to a User
   // It will be in extractResponseData.favoriteMovies
   addFavoriteMovies(userName: string, movie: any): Observable<any> {
-    // const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     return this.http
-      .post(apiUrl + 'users/' + userName, { movie })
+      .post(`${apiUrl}users/${userName}/favorites`, movie, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+        }),
+      })
       .pipe(catchError(this.handleError));
   }
 
   // Making the api call for: Delete a Favorite Movie from a User
-  deleteFavoriteMovies(userName: string, movie: any): Observable<any> {
+  deleteFavoriteMovies(userName: string, movieId: string): Observable<any> {
+    console.log('IN deleteFavoriteMovies. movieId = ', movieId);
     const token = localStorage.getItem('token');
-    // return this.http
-    // .delete(apiUrl + 'users/' + userName , {movie})
-    // .pipe(catchError(this.handleError));
     return this.http
-      .delete(`${apiUrl}users/${userName}/favorites?id=${movie}`, {
+      .delete(`${apiUrl}users/${userName}/favorites?movieId=${movieId}`, {
         headers: new HttpHeaders({
-          Authorization: 'Bearer ' + token,
+          Authorization: `Bearer ${token}`,
         }),
+        // body: { movie: movie },
       })
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
 
   // Making the api call for: Edit User
   public userEdit(userDetails: any): Observable<any> {
-    console.log(userDetails);
+    console.log('userEdit userDetails', userDetails);
     const token = localStorage.getItem('token');
     if (!token) {
       // Handle the case where there is no token
@@ -190,10 +192,10 @@ export class FetchApiDataService {
 
   // Non-typed response extraction
   private extractResponseData(res: any): any {
-    console.log('extractResponseData.................');
-    console.log(res);
+    // console.log('extractResponseData.................');
+    // console.log(res);
     const body = res;
-    console.log('extractResponseData in fetch-api-data Body : ' + body);
+    console.log('extractResponseData in fetch-api-data. body = ', body);
     return body || {};
   }
   // Error handling

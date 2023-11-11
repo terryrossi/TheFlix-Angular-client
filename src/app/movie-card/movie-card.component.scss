@@ -39,6 +39,11 @@ mat-card {
   padding: 16px;
   margin: 10px;
 }
+
 .custom-snackbar {
   bottom: 170px !important; // Adjust as needed to lower the position of the snackbar
+}
+// Favorite Movie
+.favorite {
+  color: red;
 }

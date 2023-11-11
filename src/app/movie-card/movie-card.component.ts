@@ -1,5 +1,11 @@
 // src/app/movie-card/movie-card.component.ts
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 
 // Application Components
 import { FetchApiDataService } from '../fetch-api-data.service';
@@ -23,12 +29,15 @@ import { Router } from '@angular/router';
 })
 export class MovieCardComponent implements OnInit, OnDestroy {
   movies: any[] = [];
+  // userName: string = '';
+  userFavorites: any[] = [];
 
   constructor(
     public fetchApiData: FetchApiDataService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   isUserLoggedIn(): boolean {
@@ -53,7 +62,9 @@ export class MovieCardComponent implements OnInit, OnDestroy {
     if (!this.isUserLoggedIn()) {
       this.showLoginPrompt();
     }
+    // Gets the list of movies
     this.getMovies();
+    // this.getUserFavorites();
     this.handleScroll(); // Initial positioning
     console.log('User logged In: ' + this.isUserLoggedIn());
   }
@@ -103,6 +114,68 @@ export class MovieCardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Go fetch the favorite movies of the current user
+  getUserFavorites(): void {
+    const userName = localStorage.getItem('userName');
+    if (userName) {
+      console.log('running getUserFavorites...');
+      this.fetchApiData.getUser(userName).subscribe((user: any) => {
+        // console.log('user.favoriteMovies : ', user.favoriteMovies);
+        // this.userFavorites = user.favoriteMovies.map((fav: any) =>
+        //   fav.$oid ? fav.$oid.toString() : null
+        // );
+        this.userFavorites = user.favoriteMovies;
+
+        this.userFavorites = this.userFavorites.filter((id) => id !== null); // Filter out null entries
+        // assuming fav is an object with an _id property
+
+        // To force change detection of userFavorites...
+        // this.changeDetectorRef.detectChanges();
+
+        console.log('userFavorites = ', this.userFavorites);
+      });
+    }
+  }
+  // Check if a movie is in the list of the user's favorites
+  isFavorite(movieId: any): boolean {
+    // console.log(' isFavorite ????????????????????????????????');
+    // console.log('typeof movieId param: ', typeof movieId);
+    // console.log('movieId : ', movieId);
+    // console.log('userFavorites : ', this.userFavorites);
+    // console.log('type of userFavorites[0]', typeof this.userFavorites[0]);
+    // console.log('Typeof : this.movies[0]._id: ', typeof this.movies[0]._id);
+    // console.log('Movies._id: ', this.movies[0]._id);
+
+    return this.userFavorites.includes(movieId.toString());
+  }
+
+  // Add or remove the Red Fovorite Icon based on the user's input
+  toggleFavorite(movie: any): void {
+    const userName = localStorage.getItem('userName') || '';
+
+    if (this.isFavorite(movie._id)) {
+      console.log('prepare to delete movie from fav. UserName and movie._id');
+      console.log(userName);
+      console.log(movie._id);
+      this.fetchApiData
+        .deleteFavoriteMovies(userName, movie._id)
+        .subscribe(() => {
+          this.userFavorites = this.userFavorites.filter(
+            (id) => id !== movie._id
+          );
+          // Update UI accordingly...
+        });
+    } else {
+      console.log('prepare to ADD movie to userFavorites');
+      console.log(' UserName and movie : ', userName, movie);
+
+      this.fetchApiData.addFavoriteMovies(userName, movie).subscribe(() => {
+        this.userFavorites.push(movie._id);
+        // Update UI accordingly...
+      });
+    }
+  }
+
   addToFavorites(movieId: string): void {
     // if (!this.isUserLoggedIn()) {
     //   this.showLoginPrompt();
@@ -123,8 +196,10 @@ export class MovieCardComponent implements OnInit, OnDestroy {
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
-      console.log(this.movies);
-      return this.movies;
+      console.log('Movies: ', this.movies);
+      // Call getUserFavorites here to ensure it's called after movies data is loaded
+      this.getUserFavorites();
+      // return this.movies;
     });
   }
 
