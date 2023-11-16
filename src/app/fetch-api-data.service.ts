@@ -7,25 +7,27 @@ import {
   HttpHeaders,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 //Declaring the api url that will provide data for the client app
 const apiUrl = 'https://theflix-api.herokuapp.com/';
-// const userName = 'totototo';
-// const password = 'totototo';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FetchApiDataService {
+  private favoriteMoviesIDs = new BehaviorSubject<string[]>([]);
+
+  // Observable for components to subscribe
+  public favoriteMoviesIDs$ = this.favoriteMoviesIDs.asObservable();
+
   // Inject the HttpClient module to the constructor params
   // This will provide HttpClient to the entire class, making it available via this.http
   constructor(private http: HttpClient) {}
 
   // Making the api call for: User registration
   public userRegistration(userDetails: any): Observable<any> {
-    console.log('userDetails', userDetails);
     return this.http
       .post(apiUrl + 'users', userDetails)
       .pipe(catchError(this.handleError));
@@ -61,7 +63,7 @@ export class FetchApiDataService {
   getOneMovies(movieId: string): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http
-      .get(apiUrl + 'movies/' + movieId, {
+      .get(apiUrl + 'movies/id/' + movieId, {
         headers: new HttpHeaders({
           Authorization: 'Bearer ' + token,
         }),
@@ -121,6 +123,8 @@ export class FetchApiDataService {
   // Making the api call for: Add a Favorite Movie to a User
   // It will be in extractResponseData.favoriteMovies
   addFavoriteMovies(userName: string, movie: any): Observable<any> {
+    console.log('IN addFavoriteMovies. movie object = ', movie);
+
     const token = localStorage.getItem('token');
     return this.http
       .post(`${apiUrl}users/${userName}/favorites`, movie, {
@@ -144,10 +148,14 @@ export class FetchApiDataService {
       })
       .pipe(map(this.extractResponseData), catchError(this.handleError));
   }
+  // Update the BehaviorSubject so that the list of favorite movies get refreshed
+  updateFavoriteMovies(newFavorites: string[]) {
+    this.favoriteMoviesIDs.next(newFavorites);
+  }
 
   // Making the api call for: Edit User
   public userEdit(userDetails: any): Observable<any> {
-    console.log('userEdit userDetails', userDetails);
+    // console.log('userEdit userDetails', userDetails);
     const token = localStorage.getItem('token');
     if (!token) {
       // Handle the case where there is no token
@@ -181,10 +189,7 @@ export class FetchApiDataService {
 
   // Non-typed response extraction
   private extractResponseData(res: any): any {
-    // console.log('extractResponseData.................');
-    // console.log(res);
     const body = res;
-    console.log('extractResponseData in fetch-api-data. body = ', body);
     return body || {};
   }
   // Error handling

@@ -2,15 +2,15 @@
 import {
   Component,
   HostListener,
-  OnDestroy,
+  Input,
   OnInit,
+  OnDestroy,
   ChangeDetectorRef,
 } from '@angular/core';
 
 // Application Components
 import { FetchApiDataService } from '../fetch-api-data.service';
-import { UserLoginFormComponent } from '../user-login-form/user-login-form.component';
-import { UserRegistrationFormComponent } from '../user-registration-form/user-registration-form.component';
+
 import { GenreDetailsComponent } from '../genre-details/genre-details.component';
 import { MovieDetailsComponent } from '../movie-details/movie-details.component';
 import { DirectorDetailsComponent } from '../director-details/director-details.component';
@@ -19,8 +19,11 @@ import { DirectorDetailsComponent } from '../director-details/director-details.c
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
+// Subscription will collect all subscription
+import { Subscription } from 'rxjs';
+
 // Router
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-card',
@@ -28,22 +31,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./movie-card.component.scss'],
 })
 export class MovieCardComponent implements OnInit, OnDestroy {
+  // list of all movies
   movies: any[] = [];
-  // userName: string = '';
-  userFavorites: any[] = [];
+
+  favoriteMoviesIDs: string[] = [];
+
+  private subscriptions = new Subscription();
 
   constructor(
     public fetchApiData: FetchApiDataService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    private router: Router // private changeDetectorRef: ChangeDetectorRef
+    public dialog: MatDialog, // private router: Router
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
-
-  isUserLoggedIn(): boolean {
-    return (
-      !!localStorage.getItem('token') && !!localStorage.getItem('userName')
-    );
-  }
 
   // Adjustable width
   @HostListener('window:scroll', ['$event'])
@@ -57,40 +57,87 @@ export class MovieCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('is logged in? ' + this.isUserLoggedIn());
+    // console.log('is logged in? ' + this.isUserLoggedIn());
+    // Not sure this is Needed. CHECK AND POTRNTIALLY REMOVE
     if (!this.isUserLoggedIn()) {
       this.showLoginPrompt();
     }
-    // Gets the list of movies
+
+    // Get all movies
     this.getMovies();
 
     // Gets the list of favorite movies for this user
     this.getUserFavorites();
+    this.subscriptions.add(
+      this.fetchApiData.favoriteMoviesIDs$.subscribe((ids) => {
+        this.favoriteMoviesIDs = ids;
+      })
+    );
 
     this.handleScroll(); // Initial positioning
 
     console.log('User logged In: ' + this.isUserLoggedIn());
   }
 
-  openUserRegistrationDialog(): void {
-    this.dialog.open(UserRegistrationFormComponent, {
-      width: '280px',
+  // Check if user is Logged In
+  isUserLoggedIn(): boolean {
+    return (
+      // double negative operator returns true or false instead of values
+      !!localStorage.getItem('token') && !!localStorage.getItem('userName')
+    );
+  }
+
+  // Go fetch the whole list of movie object
+  getMovies(): void {
+    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
+      this.movies = resp;
     });
   }
-  openUserLoginDialog(): void {
-    this.dialog.open(UserLoginFormComponent, {
-      width: '280px',
-    });
+
+  // Go fetch the favorite movie id's of the current user
+  getUserFavorites(): void {
+    const userName = localStorage.getItem('userName');
+    if (userName) {
+      this.fetchApiData.getUser(userName).subscribe((user: any) => {
+        this.favoriteMoviesIDs = user.favoriteMovies;
+        // Filter out null entries and fill up subscription
+        this.favoriteMoviesIDs = this.favoriteMoviesIDs.filter(
+          (id) => id !== null
+        );
+      });
+    }
   }
-  signOff(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
-    this.snackBar.open('You have been Logged Off!', 'OK', {
-      duration: 2000,
-      verticalPosition: 'top', // position the snackbar at the top
-      horizontalPosition: 'center', // position the snackbar at the center horizontally
-    });
-    this.router.navigate(['/']); // Redirect to home/welcome page
+  // Check if a movie is in the list of the user's favorites
+  isFavorite(movieId: any): boolean {
+    return this.favoriteMoviesIDs.includes(movieId.toString());
+  }
+
+  // Add or remove the Red Fovorite Icon based on the user's input
+  toggleFavorite(movie: any): void {
+    const userName = localStorage.getItem('userName') || '';
+
+    if (this.isFavorite(movie._id)) {
+      this.fetchApiData
+        .deleteFavoriteMovies(userName, movie._id)
+        .subscribe(() => {
+          this.favoriteMoviesIDs = this.favoriteMoviesIDs.filter(
+            (id) => id !== movie._id
+          );
+          // Update the BehaviorSubject in the service
+          this.fetchApiData.updateFavoriteMovies(this.favoriteMoviesIDs);
+          // trigger change detection if necessary
+          this.changeDetectorRef.detectChanges();
+        });
+    } else {
+      this.fetchApiData.addFavoriteMovies(userName, movie).subscribe(() => {
+        // this.userFavorites.push(movie._id);
+        this.favoriteMoviesIDs = [...this.favoriteMoviesIDs, movie._id];
+        // Update the BehaviorSubject in the service
+        this.fetchApiData.updateFavoriteMovies(this.favoriteMoviesIDs);
+        // trigger change detection if necessary
+        this.changeDetectorRef.detectChanges();
+      });
+    }
   }
 
   // Methods to open dialogs for Genre, Director, and Movie Details
@@ -119,62 +166,6 @@ export class MovieCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Go fetch the favorite movies of the current user
-  getUserFavorites(): void {
-    const userName = localStorage.getItem('userName');
-    if (userName) {
-      console.log('running getUserFavorites...');
-      this.fetchApiData.getUser(userName).subscribe((user: any) => {
-        this.userFavorites = user.favoriteMovies;
-
-        this.userFavorites = this.userFavorites.filter((id) => id !== null); // Filter out null entries
-        // assuming fav is an object with an _id property
-
-        // To force change detection of userFavorites...
-        // this.changeDetectorRef.detectChanges();
-      });
-    }
-  }
-  // Check if a movie is in the list of the user's favorites
-  isFavorite(movieId: any): boolean {
-    return this.userFavorites.includes(movieId.toString());
-  }
-
-  // Add or remove the Red Fovorite Icon based on the user's input
-  toggleFavorite(movie: any): void {
-    const userName = localStorage.getItem('userName') || '';
-
-    if (this.isFavorite(movie._id)) {
-      this.fetchApiData
-        .deleteFavoriteMovies(userName, movie._id)
-        .subscribe(() => {
-          this.userFavorites = this.userFavorites.filter(
-            (id) => id !== movie._id
-          );
-          // Update UI accordingly...
-        });
-    } else {
-      this.fetchApiData.addFavoriteMovies(userName, movie).subscribe(() => {
-        this.userFavorites.push(movie._id);
-        // Update UI accordingly...
-      });
-    }
-  }
-
-  ngOnDestroy() {
-    // Cleanup if needed, especially if you add any other event listeners
-  }
-
-  getMovies(): void {
-    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
-      this.movies = resp;
-      console.log('List of Movies: ', this.movies);
-      // Call getUserFavorites here to ensure it's called after movies data is loaded
-      // this.getUserFavorites();
-      // return this.movies;
-    });
-  }
-
   showLoginPrompt(): void {
     this.snackBar.open('Please log in to view the list of Movies', 'Close', {
       duration: 10000, // the message will be shown for 5 seconds; adjust as needed
@@ -182,5 +173,10 @@ export class MovieCardComponent implements OnInit, OnDestroy {
       horizontalPosition: 'center', // position the snackbar at the center horizontally
       panelClass: 'custom-snackbar',
     });
+  }
+
+  // Cleanup if needed, especially if you add any other event listeners
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }

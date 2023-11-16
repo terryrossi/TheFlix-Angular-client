@@ -1,10 +1,14 @@
 // src/app/user-registration-form/user-registration-form.component.scss
 
-// Assuming the default theme's input text color is applied, and you want to match that.
-// You may need to adjust the color value if you're using a custom theme.
 $mat-input-text-color: mat-color(#333);
 
-mat-card {
+.user-profile-container {
+  max-height: 90vh; // Limit the height to the viewport height
+  overflow-y: auto; // Enable vertical scrolling
+  padding-bottom: 20px;
+}
+
+.user-info mat-card {
   // To ensure the card takes up the max width of the dialog (if not set elsewhere)
   width: 100%;
   justify-content: center;
@@ -25,20 +29,29 @@ mat-card {
     }
   }
   mat-card-content {
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
     align-items: center; // this centers children horizontally
+    justify-content: center;
 
     mat-form-field {
-      width: 100%; // or a specific px/em/rem value
+      width: 47%;
       justify-content: center;
-      margin-bottom: 20px;
+      align-items: center;
+      align-content: center;
+      margin: 10px;
+      // background-color: rgb(160, 70, 70);
+    }
+  }
+  /* Responsive styling for smaller screens */
+  @media (max-width: 900px) {
+    mat-card-content mat-form-field {
+      width: 90%;
     }
   }
   input[matInput] {
     // Assuming we want to explicitly set the color of input texts
     // If not, we can remove this rule.
-
     color: $mat-input-text-color;
   }
   mat-hint {
@@ -46,7 +59,66 @@ mat-card {
     color: #333;
     padding-bottom: 10px;
   }
-  mat-card-actions {
-    justify-content: center;
+}
+
+mat-card-actions {
+  justify-content: center;
+}
+
+.sticky-wrapper {
+  position: sticky;
+  top: 0; /* This will keep it at the top of the viewport when scrolling up/down */
+  z-index: 10; /* This ensures it's above other content */
+}
+
+.movie-card {
+  margin-top: 1px;
+}
+.movie-image {
+  width: 100px; // Explicit width
+  height: 150px; // Explicit height
+  object-fit: cover; // Ensures image covers the given width/height while retaining aspect ratio
+  cursor: pointer; // This will change the cursor to the "clickable" hand icon
+  &:hover {
+    // any additional hover styles you want to add
   }
+}
+.movie-card mat-card-header {
+  // This is an optional style. By default, Angular Material puts some padding on the header.
+  // You can adjust or remove this padding if you want the title and subtitle to be closer together.
+  padding: 5px 0;
+}
+.movie-card mat-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Center contents horizontally
+  align-items: center; // Center contents vertically
+  text-align: center; // Center text
+  background-color: rgb(164, 160, 160);
+
+  // This is an optional style. By default, Angular Material puts some padding on the header.
+  // You can adjust or remove this padding if you want the title and subtitle to be closer together.
+  // padding: 5px;
+  margin: 5px;
+
+  max-height: 100%; // Ensure the card doesn't exceed the container's height
+  // overflow-y: auto; // Enable scrolling within the card if needed
+}
+
+.movie-card mat-card-title {
+  // To ensure the title color matches the input text color
+  // color: #333;
+  // Make the title bold
+  // font-weight: bold;
+  font-size: medium;
+
+  // Add space below the title
+  margin-bottom: 16px; // Adjust this value as needed
+}
+.custom-snackbar {
+  bottom: 170px !important; // Adjust as needed to lower the position of the snackbar
+}
+// Favorite Movie
+.favorite {
+  color: red;
 }

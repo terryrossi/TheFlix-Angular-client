@@ -1,81 +1,111 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>User Profile</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form #profileForm="ngForm">
-      <!-- Non-editable UserID -->
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="User Name"
-          [(ngModel)]="userData.userName"
-          type="text"
-          name="userName"
-          disabled
-          #userName="ngModel"
-        />
-        <mat-hint align="start">User Name is not updatable</mat-hint>
-      </mat-form-field>
+<!DOCTYPE html>
+<div class="user-profile-container">
+  <div class="user-info">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>User Profile</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form #profileForm="ngForm">
+          <!-- Non-editable UserID -->
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="User Name"
+              [(ngModel)]="userData.userName"
+              type="text"
+              name="userName"
+              disabled
+              #userName="ngModel"
+            />
+            <mat-hint align="start">User Name is not updatable</mat-hint>
+          </mat-form-field>
 
-      <mat-form-field>
-        <input
-          matInput
-          [(ngModel)]="userData.firstName"
-          placeholder="First Name"
-          type="text"
-          name="firstName"
-          required
-          #firstName="ngModel"
-        />
-        <mat-error *ngIf="firstName.invalid && firstName.touched">
-          Firstname is required.
-        </mat-error>
-        <mat-hint align="start">First Name Must be alphanumeric</mat-hint>
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          [(ngModel)]="userData.lastName"
-          placeholder="Last Name"
-          type="text"
-          name="lastName"
-          required
-          #lastName="ngModel"
-        />
-        <mat-error *ngIf="lastName.invalid && lastName.touched">
-          Lastname is required.
-        </mat-error>
-        <mat-hint align="start">Last Name Must be alphanumeric</mat-hint>
-      </mat-form-field>
-      <!-- Non-editable Birth Date -->
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="Birth Date"
-          [value]="userData.birthDate | date : 'longDate'"
-          disabled
-        />
-        <mat-hint align="start">Your date of birth (not updatable)</mat-hint>
-      </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              [(ngModel)]="userData.firstName"
+              placeholder="First Name"
+              type="text"
+              name="firstName"
+              required
+              #firstName="ngModel"
+            />
+            <mat-error *ngIf="firstName.invalid && firstName.touched">
+              Firstname is required.
+            </mat-error>
+            <mat-hint align="start">First Name Must be alphanumeric</mat-hint>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              [(ngModel)]="userData.lastName"
+              placeholder="Last Name"
+              type="text"
+              name="lastName"
+              required
+              #lastName="ngModel"
+            />
+            <mat-error *ngIf="lastName.invalid && lastName.touched">
+              Lastname is required.
+            </mat-error>
+            <mat-hint align="start">Last Name Must be alphanumeric</mat-hint>
+          </mat-form-field>
+          <!-- Non-editable Birth Date -->
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Birth Date"
+              [value]="userData.birthDate | date : 'longDate'"
+              disabled
+            />
+            <mat-hint align="start"
+              >Your date of birth (not updatable)</mat-hint
+            >
+          </mat-form-field>
 
-      <mat-form-field>
-        <input
-          matInput
-          [(ngModel)]="userData.email"
-          type="email"
-          placeholder="Email"
-          name="email"
-          required
-          #email="ngModel"
-        />
-        <mat-error *ngIf="email.invalid && email.touched">
-          Email is required.
-        </mat-error>
-        <mat-hint align="start">Must be a valid email</mat-hint>
-      </mat-form-field>
-    </form>
-  </mat-card-content>
+          <mat-form-field>
+            <input
+              matInput
+              [(ngModel)]="userData.email"
+              type="email"
+              placeholder="Email"
+              name="email"
+              required
+              #email="ngModel"
+            />
+            <mat-error *ngIf="email.invalid && email.touched">
+              Email is required.
+            </mat-error>
+            <mat-hint align="start">Must be a valid email</mat-hint>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <!-- Add the list of favorite movies -->
+
+  <div *ngIf="movies.length > 0" class="movie-card" style="display: flex">
+    <mat-card *ngFor="let movie of movies" style="flex: 1 1 auto">
+      <mat-card-header>
+        <mat-card-title>{{ movie.title }}</mat-card-title>
+      </mat-card-header>
+      <img
+        class="movie-image"
+        src="{{ movie.imageURL }}"
+        alt="{{ movie.title }}"
+        (click)="openMovieDetails(movie)"
+      />
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="toggleFavorite(movie)">
+          <mat-icon [class.favorite]="isFavorite(movie._id)">{{
+            isFavorite(movie._id) ? "favorite" : "favorite_border"
+          }}</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
   <mat-card-actions>
     <button
       mat-raised-button
@@ -89,4 +119,5 @@
       Delete Profile
     </button>
   </mat-card-actions>
-</mat-card>
+  <!-- </mat-card> -->
+</div>
