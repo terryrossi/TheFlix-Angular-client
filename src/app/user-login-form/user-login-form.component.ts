@@ -14,12 +14,27 @@ import { Router } from '@angular/router';
 
 import { NgForm } from '@angular/forms';
 
+/**
+ * A component for user login.
+ *
+ * This component provides a form for users to enter their login credentials (username and password).
+ * It communicates with the backend API to authenticate the user, handling both successful logins and
+ * login errors. On successful login, it stores the user's token and username in local storage.
+ *
+ * @Component Decorator to define the following:
+ * - selector: 'app-user-login-form'
+ * - templateUrl: './user-login-form.component.html'
+ * - styleUrls: ['./user-login-form.component.scss']
+ */
 @Component({
   selector: 'app-user-login-form',
   templateUrl: './user-login-form.component.html',
   styleUrls: ['./user-login-form.component.scss'],
 })
 export class UserLoginFormComponent implements OnInit {
+  /**
+   * User data for the login form, with fields for username and password.
+   */
   @Input() userData = {
     userName: '',
     password: '',
@@ -34,7 +49,15 @@ export class UserLoginFormComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  // This is the function responsible for sending the form inputs to the backend
+  /**
+   * Handles the user login process. Submits the login form data to the backend API.
+   * @param loginForm {NgForm} - The login form with user data.
+   *
+   * This function checks if the login form is valid, and then uses the `FetchApiDataService` to send
+   * the login data to the backend. On successful login, it closes the dialog, stores the user's token
+   * and username in local storage, and optionally navigates to another route. If there's an error,
+   * it displays an error message in a snackbar.
+   */
   loginUser(loginForm: NgForm): void {
     if (!loginForm.valid) {
       // Optionally handle the invalid form case, e.g., show a message
@@ -42,34 +65,25 @@ export class UserLoginFormComponent implements OnInit {
     }
     this.fetchApiData.userLogin(this.userData).subscribe({
       next: (result) => {
-        // Log the successful response to the console
-        console.log('Login response:', result);
+        console.log('Login response:', result); // Log the successful response to the console
 
-        // Logic for a successful user login goes here!
+        /**
+         * Successful user login
+         *  */
 
         this.dialogRef.close(); // This will close the modal on success!
-        localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
+        localStorage.setItem('token', result.token);
         localStorage.setItem('userName', this.userData.userName);
         this.snackBar.open('You have been Logged In!', 'OK', {
           duration: 2000,
           verticalPosition: 'top', // position the snackbar at the top
           horizontalPosition: 'center', // position the snackbar at the center horizontally
         });
-
-        // this.router.navigate(['movies']);
       },
       error: (errorResponse) => {
         // Log the detailed error response to the console
         console.log('Detailed error BELOW:', errorResponse);
         console.log(errorResponse);
-        // console.log(
-        // 'errorResponse.error.message:',
-        // errorResponse.error.message
-        // );
-        // console.log(errorResponse.error.message);
-
-        // Display the error message (assuming errorResponse.error.message contains the message)
-        // if (errorResponse.error.message) {
         this.snackBar.open(errorResponse, 'OK', {
           duration: 2000,
         });

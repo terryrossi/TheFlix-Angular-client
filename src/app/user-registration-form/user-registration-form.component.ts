@@ -20,6 +20,29 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+/**
+ * Component for handling user registration.
+ *
+ * This component provides a form for new users to register. It includes fields for first name, last name,
+ * username, password, email, and birth date. The component uses Angular Material components for the UI elements.
+ *
+ * Upon submission, the form data is sent to the backend API for registration. If the registration is successful,
+ * the user is notified, and they are navigated to the 'movies' page. If there's an error, an error message is displayed.
+ *
+ * Functions:
+ * - `togglePasswordVisibility`: Toggles the visibility of the password in the form.
+ * - `registerUser`: Submits the user registration form. It validates the form, formats the birth date, sends the data
+ *   to the backend, and handles the response or any errors.
+ *
+ * Uses:
+ * - `FetchApiDataService` to make the API calls for user registration.
+ * - `MatDialogRef` to close the registration dialog on successful registration.
+ * - `MatSnackBar` to show notifications to the user.
+ * - `Router` to navigate the user after successful registration.
+ *
+ * The component uses Angular's `OnInit` lifecycle hook for initialization processes and `@Input` to receive data
+ * (if any) passed to it.
+ */
 @Component({
   selector: 'app-user-registration-form',
   templateUrl: './user-registration-form.component.html',
@@ -72,13 +95,13 @@ export class UserRegistrationFormComponent implements OnInit {
         // Logic for a successful user registration goes here!
         this.dialogRef.close(); // This will close the modal on success!
 
-        // Log the user automatically will require to call the login component
-        // It is better to have the user log in so his password manager can save the credentials.
-        //
-        // localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
-        // localStorage.setItem('userName', this.userData.userName);
-
-        //
+        /** Log the user automatically will require to call the login component
+         * It is better to have the user log in so his password manager can save the credentials.
+         *
+         * localStorage.setItem('token', result.token); // assuming the response contains the token in a field named 'token'
+         * localStorage.setItem('userName', this.userData.userName);
+         *
+         */
         this.snackBar.open(
           'You have been Registered. Next please Log In...',
           'OK',
