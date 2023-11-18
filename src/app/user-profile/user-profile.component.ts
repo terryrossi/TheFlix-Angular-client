@@ -62,8 +62,11 @@ export class UserProfileComponent implements OnInit {
 
   /**
    * A subscription to manage RxJS subscriptions.
+   * This could be used to subscribe to an observable that would allow refreshing of the
+   * list of favoriteMoviesIDs when the user make a change in the user profile
+   * like removing a favorited movie from his list.
    */
-  private subscriptions = new Subscription();
+  // private subscriptions = new Subscription();
 
   constructor(
     private fetchApiData: FetchApiDataService,
@@ -75,8 +78,6 @@ export class UserProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('@@@@ ngOnInit');
-
     this.getUserData();
   }
 
@@ -84,8 +85,6 @@ export class UserProfileComponent implements OnInit {
    * Retrieves the current user's data from local storage or the API.
    */
   getUserData(): void {
-    console.log('@@@@ getUserData');
-
     // Retrieve the user data from local storage or an API
     const userName = localStorage.getItem('userName');
     // Check if userName is not null
@@ -101,13 +100,13 @@ export class UserProfileComponent implements OnInit {
           // Check if user has favorite movie IDs and fetch the corresponding movie objects
           // if (this.favoriteMoviesIDs && this.favoriteMoviesIDs.length > 0) {
           // }
-          this.subscriptions.add(
-            this.fetchApiData.favoriteMoviesIDs$.subscribe((ids) => {
-              this.favoriteMoviesIDs = ids;
+          // this.subscriptions.add(
+          //   this.fetchApiData.favoriteMoviesIDs$.subscribe((ids) => {
+          //     this.favoriteMoviesIDs = ids;
 
-              this.getFavoriteMoviesObjects();
-            })
-          );
+          //     this.getFavoriteMoviesObjects();
+          //   })
+          // );
 
           // Go grab the list of favorite movies (Object._id's) from this user and transform them into strings
           // because the API call used later to fetch a single movie expect a string as a parameter
@@ -115,10 +114,6 @@ export class UserProfileComponent implements OnInit {
             id.toString()
           );
 
-          console.log(
-            'favoriteMoviesIDs in user-profile getUserData() : ',
-            this.favoriteMoviesIDs
-          );
           // Check if user has favorite movie IDs and fetch the corresponding movie objects
           if (this.favoriteMoviesIDs && this.favoriteMoviesIDs.length > 0) {
             this.getFavoriteMoviesObjects();
@@ -138,25 +133,14 @@ export class UserProfileComponent implements OnInit {
    * Fetches movie objects based on the user's favorite movie IDs.
    */
   getFavoriteMoviesObjects(): void {
-    console.log('@@@@ getFavoriteMoviesObjects');
-
     this.movies = []; // Reset movies array
-    console.log(
-      'IN getFavoriteMoviesObjects ######################################## movies just reset to [] = ',
-      this.movies
-    );
-    console.log('this.favoriteMoviesIDs ; ', this.favoriteMoviesIDs);
+
     this.favoriteMoviesIDs.forEach((movieId) => {
-      console.log('movieId : ', movieId);
       this.fetchApiData.getOneMovies(movieId).subscribe((movieObject) => {
         // this.movies.push(movieObject);
         this.movies = [...this.movies, movieObject];
-        // If we need to trigger change detection, we should use the next line
+        // If we need to trigger change detection, we should use the next line (Never work!)
         // this.changeDetectorRef.detectChanges();
-        console.log(
-          'list of favorited movie Objects in PROFILE inside method getFavoriteMoviesObjects() : ',
-          this.movies
-        );
       });
     });
   }
@@ -167,8 +151,6 @@ export class UserProfileComponent implements OnInit {
    * @returns {boolean} - True if the movie is a favorite, otherwise false.
    */
   isFavorite(movieId: any): boolean {
-    console.log('@@@@ isFavorite');
-
     return this.favoriteMoviesIDs.includes(movieId.toString());
   }
 
@@ -177,8 +159,6 @@ export class UserProfileComponent implements OnInit {
    * @param movie {any} - The movie object to toggle.
    */
   toggleFavorite(movie: any): void {
-    console.log('@@@@ toggleFavorite');
-
     const userName = localStorage.getItem('userName') || '';
 
     if (this.isFavorite(movie._id)) {
@@ -241,9 +221,6 @@ export class UserProfileComponent implements OnInit {
     // If changes are detected, proceed with the update
     this.fetchApiData.userEdit(this.userData).subscribe({
       next: (result) => {
-        // Log the successful response to the console
-        console.log('User Update response:', result);
-
         // Logic for a successful user update goes here!
         this.dialogRef.close(); // This will close the modal on success!
 
@@ -374,7 +351,6 @@ export class UserProfileComponent implements OnInit {
    * This function enhances the user experience by providing more context about the directors of the movies.
    */
   openDirectorDetails(director: any): void {
-    // console.log(director);
     this.dialog.open(DirectorDetailsComponent, {
       width: '500px',
       data: { director: director }, // Pass the director data (in movie) to the dialog
@@ -421,8 +397,7 @@ export class UserProfileComponent implements OnInit {
    *
    * Note: If additional event listeners or other cleanup tasks are added in the future, they should also be addressed in this method.
    */ ngOnDestroy() {
-    console.log('@@@@ ngOnDestroy');
     this.movies = [];
-    this.subscriptions.unsubscribe();
+    // this.subscriptions.unsubscribe();
   }
 }

@@ -222,9 +222,10 @@ export class FetchApiDataService {
    * @param newFavorites {string[]} - The new list of favorite movies' IDs.
    *
    * This method updates the BehaviorSubject, favoriteMoviesIDs, with a new list of favorite movies.
-   * It is typically called after adding or removing a movie from a user's favorites to ensure the
+   * It is called after adding or removing a movie from a user's favorites to ensure the
    * list is current and reflects the latest changes.
-   */ updateFavoriteMovies(newFavorites: string[]) {
+   */
+  updateFavoriteMovies(newFavorites: string[]) {
     this.favoriteMoviesIDs.next(newFavorites);
   }
 

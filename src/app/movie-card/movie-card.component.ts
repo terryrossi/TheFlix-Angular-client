@@ -81,8 +81,6 @@ export class MovieCardComponent implements OnInit, OnDestroy {
    * Displays a login prompt if the user is not logged in.
    */
   ngOnInit(): void {
-    // console.log('is logged in? ' + this.isUserLoggedIn());
-    // Not sure this is Needed. CHECK AND POTRNTIALLY REMOVE
     if (!this.isUserLoggedIn()) {
       this.showLoginPrompt();
     }
@@ -92,6 +90,13 @@ export class MovieCardComponent implements OnInit, OnDestroy {
 
     // Gets the list of favorite movies for this user
     this.getUserFavorites();
+
+    /**
+     * The following use of subscription is mandatory to update the list of favoriteMoviesIDs
+     * when a user removes a favorite movie from the user profile and closes the profile
+     * dialog. This allows the movie-card component to keep track of the last accurate
+     * list of favoriteMoviesIDs
+     */
     this.subscriptions.add(
       this.fetchApiData.favoriteMoviesIDs$.subscribe((ids) => {
         this.favoriteMoviesIDs = ids;
@@ -130,11 +135,13 @@ export class MovieCardComponent implements OnInit, OnDestroy {
     const userName = localStorage.getItem('userName');
     if (userName) {
       this.fetchApiData.getUser(userName).subscribe((user: any) => {
-        this.favoriteMoviesIDs = user.favoriteMovies;
-        // Filter out null entries and fill up subscription
-        this.favoriteMoviesIDs = this.favoriteMoviesIDs.filter(
-          (id) => id !== null
+        this.favoriteMoviesIDs = user.favoriteMovies.map((id: any) =>
+          id.toString()
         );
+        // Filter out null entries and fill up subscription
+        // this.favoriteMoviesIDs = this.favoriteMoviesIDs.filter(
+        //   (id) => id !== null
+        // );
       });
     }
   }
@@ -164,14 +171,14 @@ export class MovieCardComponent implements OnInit, OnDestroy {
           // Update the BehaviorSubject in the service
           this.fetchApiData.updateFavoriteMovies(this.favoriteMoviesIDs);
           // trigger change detection if necessary
-          this.changeDetectorRef.detectChanges();
+          // this.changeDetectorRef.detectChanges();
         });
     } else {
       this.fetchApiData.addFavoriteMovies(userName, movie).subscribe(() => {
         // this.userFavorites.push(movie._id);
         this.favoriteMoviesIDs = [...this.favoriteMoviesIDs, movie._id];
         // Update the BehaviorSubject in the service
-        this.fetchApiData.updateFavoriteMovies(this.favoriteMoviesIDs);
+        // this.fetchApiData.updateFavoriteMovies(this.favoriteMoviesIDs);
         // trigger change detection if necessary
         // this.changeDetectorRef.detectChanges();
       });
