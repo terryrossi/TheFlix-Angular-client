@@ -30,7 +30,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Objective
 
-Using Angular, build the client-side for an app called TheFlix-Angular based on its
+Using Angular and Angular-Material, build the client-side for an app called TheFlix-Angular based on its
 existing server-side code (REST API and database).
 
 ## Context
