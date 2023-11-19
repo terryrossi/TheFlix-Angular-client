@@ -30,7 +30,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Objective
 
-Using React and Redux, build the client-side for an app called TheFlix based on its
+Using Angular, build the client-side for an app called TheFlix-Angular based on its
 existing server-side code (REST API and database).
 
 ## Context
@@ -40,10 +40,7 @@ the server-side and sent to the browser, resulting in a poor user experience. Th
 browsers and libraries such as Angular, the client-side of an app is today considered to be just as
 important as the server-side. Full-stack developers need to be well-versed in both server-side and
 client-side development.
-In the previous Achievement, I've built the server-side for a movie app called TheFlix. The API and
-database that I built meet the information needs of TheFlix users. Now, I am creating the
-interface they’ll use when making requests to—and receiving responses from—the server-side. The
-client-side of my TheFlix app will include several interface views (built using TypeScript, the Angular Framework and Material for html elements) that will handle data through the (previously defined) REST API endpoints.
+In the previous Achievement, I've built the server-side for a movie app called TheFlix with a React/Redux front-end in its first version. The API and database that I built meet the information needs of TheFlix-Angular users. Now, I am creating a second interface (the first one was React/Redux) they’ll use when making requests to—and receiving responses from—the server-side. The client-side of my TheFlix-Angular app will include several interface views (built using TypeScript, the Angular Framework and Material for html elements) that will handle data through the (previously defined) REST API endpoints.
 The code i write impacts both the users and fellow developers. As I work through this
 Achievement, I’ll need to consider, among other things, the readability and maintenance of my
 codebase, and the design and usability of the app.
